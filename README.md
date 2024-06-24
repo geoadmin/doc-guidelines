@@ -19,3 +19,4 @@ Geoadmin PP BGDI general and coding guidelines.
    3. [Git Flow](GIT_FLOW.md)
    4. [Github Workflows](GITHUB_WORKFLOW.md)
 3. [Versioning and release](VERSIONING_RELEASE.md)
+4. [CI](CI.md)
