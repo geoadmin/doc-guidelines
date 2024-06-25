@@ -29,7 +29,7 @@ The high level code organization should look like this
 |- ORGANIZATIONS_OR_ACCOUNT   # e.g. AWS Account name
 |           |- modules        # terraform reusable modules for this organization/account
 |           |- shared         # shared resources
-|           |- STAGING        # resource pro staging
+|           |- ENVIRONMENT    # resource pro environment
 ```
 
 Then it should mirror the hierarchical structure of the infrastructure. Note that each terraform module (project) should be kept small.
@@ -67,7 +67,14 @@ Enable state locking to prevent concurrent operations from corrupting your state
 
 ### State migration
 
-To migrate the state we use the `terraform init --migrate-state` command. After migrating the state we need to manually clean up the old state by removing the S3 file and deleting the dynamoDB entry
+To migrate the state we use the `terraform init -migrate-state` command. After migrating the state we need to manually clean up the old state by removing the S3 file and deleting the dynamoDB entry
+
+Here is an example of migrate state procedure
+
+1. Run the `terraform init` BEFORE changing the state key on the terraform backend file :warning:
+2. Update the the state key in the terraform backend file
+3. Run `terraform init -migrate-state`
+4. Clean the old state in S3 and DynamoDB
 
 ```bash
 OLD_KEY=<old-state-key>
@@ -79,7 +86,7 @@ aws --profile AWS_ACCOUNT_PROFILE dynamodb delete-item --table-name TABLE_NAME -
 
 ### Module Guidelines
 
-- :warning: ALWAYS changes resources using terraform (no manual changes via UI, e.g. AWS web console) :warning:
+- :warning: ALWAYS change resources using terraform (no manual changes via UI, e.g. AWS web console) :warning:
 - :warning: NEVER EVER apply changes before opening a Pull Request :warning:
 - `master` branch SHOULD reflect the current infrastructure state, which means PR that are applied should be merged as soon as they have been reviewed. DON'T keep applied PR open for more that a few days.
 - Keep track of applied changes in the PR using the checkbox
