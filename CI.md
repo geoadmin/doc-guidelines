@@ -22,7 +22,7 @@ Each service or productive piece of software should be automatically tested, bef
 
 ## Build Badge
 
-Build badge should be added to the top of the README.md file of the github project using the following template:
+[Build badge](https://docs.aws.amazon.com/codebuild/latest/userguide/sample-build-badges.htmlI) should be added to the top of the README.md file of the github project using the following template:
 
 ```md
 | Branch | Status |
@@ -31,10 +31,6 @@ Build badge should be added to the top of the README.md file of the github proje
 | master | ![Build Status](BADGE_LINK) |
 ```
 
-To get the badge login to the [AWS Console](https://console.aws.amazon.com) on the account managing Codebuild and navigate to the Codebuild project (make sure you are on the correct AWS zone `eu-central-1`). Then on the project main page click on `Copy badge URL`. This link looks as follow:
+To get the badge see [Access your AWS CodeBuild build badges](https://docs.aws.amazon.com/codebuild/latest/userguide/sample-build-badges.html#access-badges).
 
-```bash
-https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJl...I6MX0%3D&branch=master
-```
-
-Change the branch at the end of the link accordingly.
+:warning: Change the branch at the end of the link accordingly.

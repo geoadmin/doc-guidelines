@@ -7,13 +7,15 @@ General terraform guidelines and best practices
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Code Organization](#code-organization)
-  - [Reusable Module Usage](#reusable-module-usage)
 - [State Management](#state-management)
   - [Remote State](#remote-state)
     - [State key](#state-key)
   - [State Locking](#state-locking)
   - [State migration](#state-migration)
+- [Module](#module)
   - [Module Guidelines](#module-guidelines)
+  - [Reusable/child Module Usage](#reusablechild-module-usage)
+- [Development Guidelines](#development-guidelines)
 - [Code formatting](#code-formatting)
 
 ## Introduction
@@ -32,15 +34,7 @@ The high level code organization should look like this
 |           |- ENVIRONMENT    # resource pro environment
 ```
 
-Then it should mirror the hierarchical structure of the infrastructure. Note that each terraform module (project) should be kept small.
-
-### Reusable Module Usage
-
-Use modules to encapsulate and reuse configurations. This promotes DRY (Don't Repeat Yourself) principles and makes your configurations more manageable.
-
-- Create modules for common resources.
-- Use versioned modules from the Terraform Registry when possible.
-- Use modules to share global variales between terraform modules
+Then it should mirror the hierarchical structure of the infrastructure (see [PP BGDI Infra Architecture](https://ltwiki.adr.admin.ch:8443/display/PB/Runtime+Infrastructure+Stack)). Note that each terraform module (project) should be kept small.
 
 ## State Management
 
@@ -50,6 +44,12 @@ We use remote state management using AWS S3 backend
 
 - Encrypt the state file at rest (see [Terraform Documentation](https://developer.hashicorp.com/terraform/language/settings/backends/s3#encrypt)).
 - Put the state backend definition in `terraform.tf` file
+- For AWS ressources we use one state bucket per AWS Account
+- All terraform code relating to a remote state HAVE TO BE in the same git repository. However you can have several state buckets in the same git repository, but they need to be clearly separated as in code organization above.
+- Cross account state bucket access IS NOT ALLOWED. This allow a simpler terraform state bucket access management and also improve security. This means that we cannot get remote state from another account.
+  - Improve security as one developer might have access to one account but the other, which means developer is only allow to use terraform on the account it has access.
+  - Simplify state key migration, as we have to check for remote state only in one github repository
+- Inside the same account (AWS, github organization, ...) we can use remote state to access other root module data to avoid hardcoding
 
 #### State key
 
@@ -84,7 +84,27 @@ aws --profile AWS_ACCOUNT_PROFILE s3 rm s3://STATE_BUCKET/${OLD_KEY}
 aws --profile AWS_ACCOUNT_PROFILE dynamodb delete-item --table-name TABLE_NAME --key '{"LockID": {"S": "STATE_BUCKET/'${OLD_KEY}'-md5"}}'
 ```
 
+## Module
+
+*Modules are containers for multiple resources that are used together.* See [Terraform Modules](https://developer.hashicorp.com/terraform/language/modules)
+
 ### Module Guidelines
+
+- Root module must contain the terraform backend definition
+- Avoid using magic number like AWS account id in your code but use variables, locals or global variables defined in reusable module instead
+- Avoid hard dependencies between modules whenever possible. By hard dependencies, I mean using remote state for a value when the use of the value in the resource doesn't need to exists, for example for AWS policies and role you might be tempted to get the role ARN or resource ARN from a remote state to create a new role or policy, but this would add a hard dependency on the terraform module where one module needs to be applied before the other, while on the AWS resource you don't have any hard dependencies, the ARN resource in a policy doesn't need to exists to create the policy.
+- Pay attention to circlar dependencies between modules, when the resource already exists and are imported to terraform, you don't have circular dependencies but by re-creating from scratch it might be the case !
+
+### Reusable/child Module Usage
+
+Use modules to encapsulate and reuse configurations. This promotes DRY (Don't Repeat Yourself) principles and makes your configurations more manageable.
+
+- Create modules for common resources.
+- Use versioned modules from the Terraform Registry when possible.
+- Use modules to share global variales between terraform modules
+- Pay attention to the drawback of reusable modules, were changing it might impact lots of other root modules
+
+## Development Guidelines
 
 - :warning: ALWAYS change resources using terraform (no manual changes via UI, e.g. AWS web console) :warning:
 - :warning: NEVER EVER apply changes before opening a Pull Request :warning:
@@ -92,12 +112,8 @@ aws --profile AWS_ACCOUNT_PROFILE dynamodb delete-item --table-name TABLE_NAME -
 - Keep track of applied changes in the PR using the checkbox
   - [ ] changes applied
   
-  Modify/add checkbox if needed (e.g. one checkbox per module/staging, etc)
-- For AWS ressources we use one state bucket per AWS Account, we don't allow cross account state bucket access. This allow a simpler terraform state bucket access management and also improve security.
-- Inside the same AWS account we can use remote state to access other terraform module data to avoid hardcoding
-- Avoid using magic number like AWS account id in your code but use variables, locals or global variables defined in reusable module instead
-- Avoid hard dependencies between modules whenever possible. By hard dependencies, I mean using remote state for a value when the use of the value in the resource doesn't need to exists, for example for AWS policies and role you might be tempted to get the role ARN or resource ARN from a remote state to create a new role or policy, but this would add a hard dependency on the terraform module where one module needs to be applied before the other, while on the AWS resource you don't have any hard dependencies, the ARN resource in a policy doesn't need to exists to create the policy.
-
+  Modify/add/remove checkbox if needed (e.g. one checkbox per module/staging, etc)
+  
 ## Code formatting
 
 All terraform code should have the same formatting, for this we use the standard `terraform fmt` tool to format the code.
