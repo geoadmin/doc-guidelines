@@ -48,16 +48,16 @@ Use modules to encapsulate and reuse configurations. This promotes DRY (Don't Re
 
 We use remote state management using AWS S3 backend
 
-- Encrypt the state file at rest.
+- Encrypt the state file at rest (see [Terraform Documentation](https://developer.hashicorp.com/terraform/language/settings/backends/s3#encrypt)).
 - Put the state backend definition in `terraform.tf` file
 
 #### State key
 
 We use the terraform module definition file path as state key in S3 prefixed with a version string `v1`; e.g. `v1/infra-terraform-bgdi/systems-prod/map.terraform.tf`
 
-The version prefix is to avoid any risk of key collision in future in case of code structure re-organization.
+The version prefix is to avoid any risk of key collision in the future in case of code structure re-organization.
 
-*NOTE: We used to use an UUID as state key, which has the advantage that we did not have to change the state when reorganizing resources. However it has the downside that UUID key were very hard to code review and error prone due to copy paste mistake not being easily identifiable.*
+*NOTE: We used to use an UUID as state keys, which has the advantage that we did not have to change the state when reorganizing resources. However it has the downside that UUID key were very hard to code review and error prone due to copy paste mistake not being easily identifiable.*
 
 ### State Locking
 

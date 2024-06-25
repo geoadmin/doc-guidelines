@@ -3,9 +3,9 @@
 Each service or productive piece of software should be automatically tested, before merged to `develop`. We use [AWS CodeBuild](https://docs.aws.amazon.com/fr_fr/codebuild/) for building/testing code. For every software we have two Codebuild projects
 
 - One which is triggered by Pull Request CREATE and UPDATE event
-  - This one lint, check formatting, build and test the code
+  - This one lints, checks formatting, builds and test the code
 - One which is triggered by Pull Request merge event
-  - This one build and release the build artefact (release on S3 build artifact or ECR repository)
+  - This one builds and releases the build artefact (release on S3 build artifact or ECR repository)
 
 ## Table of contents
 
