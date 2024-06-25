@@ -13,7 +13,7 @@ General terraform guidelines and best practices
     - [State key](#state-key)
   - [State Locking](#state-locking)
   - [State migration](#state-migration)
-  - [Module](#module)
+  - [Module Guidelines](#module-guidelines)
 - [Code formatting](#code-formatting)
 
 ## Introduction
@@ -77,11 +77,19 @@ aws --profile AWS_ACCOUNT_PROFILE s3 rm s3://STATE_BUCKET/${OLD_KEY}
 aws --profile AWS_ACCOUNT_PROFILE dynamodb delete-item --table-name TABLE_NAME --key '{"LockID": {"S": "STATE_BUCKET/'${OLD_KEY}'-md5"}}'
 ```
 
-### Module
+### Module Guidelines
 
+- :warning: ALWAYS changes resources using terraform (no manual changes via UI, e.g. AWS web console) :warning:
+- :warning: NEVER EVER apply changes before opening a Pull Request :warning:
+- `master` branch SHOULD reflect the current infrastructure state, which means PR that are applied should be merged as soon as they have been reviewed. DON'T keep applied PR open for more that a few days.
+- Keep track of applied changes in the PR using the checkbox
+  - [ ] changes applied
+  
+  Modify/add checkbox if needed (e.g. one checkbox per module/staging, etc)
 - For AWS ressources we use one state bucket per AWS Account, we don't allow cross account state bucket access. This allow a simpler terraform state bucket access management and also improve security.
 - Inside the same AWS account we can use remote state to access other terraform module data to avoid hardcoding
 - Avoid using magic number like AWS account id in your code but use variables, locals or global variables defined in reusable module instead
+- Avoid hard dependencies between modules whenever possible. By hard dependencies, I mean using remote state for a value when the use of the value in the resource doesn't need to exists, for example for AWS policies and role you might be tempted to get the role ARN or resource ARN from a remote state to create a new role or policy, but this would add a hard dependency on the terraform module where one module needs to be applied before the other, while on the AWS resource you don't have any hard dependencies, the ARN resource in a policy doesn't need to exists to create the policy.
 
 ## Code formatting
 
