@@ -15,6 +15,8 @@ There are a number of style guides out there. Here a few important things that w
   - [Component method](#component-method)
     - [Definition](#definition)
     - [Method called from template](#method-called-from-template)
+- [Testing](#testing)
+  - [E2E tests of web application](#e2e-tests-of-web-application)
 - [Debugging on Mobile Phone](#debugging-on-mobile-phone)
 
 **The foremost goal is that reading and understanding your javascript code is easy for someone else (or yourself in a few months time).**
@@ -241,6 +243,7 @@ export default {
     },
 }
 ```
+
 ```javascript
 import { ref } from 'vue'
 import { Map } from 'ol'
@@ -266,6 +269,7 @@ export default {
     },
 }
 ```
+
 ```javascript
 import { ref } from 'vue'
 import { Map } from 'ol'
@@ -322,6 +326,20 @@ Also prefer the short syntax `increment() {}` to `increment: function() {}`
 #### Method called from template
 
 Methods called from a template (except for event listeners) should not have any side effects, such as changing data or triggering asynchronous processes. If you find yourself tempted to do that you should probably use a [lifecycle hook](https://v3.vuejs.org/guide/instance.html#lifecycle-hooks) instead. For more infos about this see [Vue 3 - Methods](https://v3.vuejs.org/guide/data-methods.html#methods).
+
+## Testing
+
+### E2E tests of web application
+
+In general for kind of end to end test for web application we use [Cypress.io](https://www.cypress.io/).
+
+For cypress best practice see [Cypress Best practice](https://docs.cypress.io/guides/references/best-practices)
+
+We also the following best practices:
+
+1. Don't create too much test case (`it()`)
+   1. Each test case cost on cypress cloud
+   2. Each test case takes time to initialized
 
 ## Debugging on Mobile Phone
 
