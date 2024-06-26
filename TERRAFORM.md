@@ -34,7 +34,7 @@ The high level code organization should look like this
 |           |- ENVIRONMENT    # resource pro environment
 ```
 
-Then it should mirror the hierarchical structure of the infrastructure (see [PP BGDI Infra Architecture](https://ltwiki.adr.admin.ch:8443/display/PB/Runtime+Infrastructure+Stack)). Note that each terraform module (project) should be kept small.
+Then it should mirror the hierarchical structure of the infrastructure (see [PP BGDI Infra Architecture](https://ltwiki.adr.admin.ch:8443/display/PB/Runtime+Infrastructure+Stack)). Note that each terraform module should be kept small.
 
 ## State Management
 
@@ -92,8 +92,9 @@ aws --profile AWS_ACCOUNT_PROFILE dynamodb delete-item --table-name TABLE_NAME -
 
 - Root module must contain the terraform backend definition
 - Avoid using magic number like AWS account id in your code but use variables, locals or global variables defined in reusable module instead
-- Avoid hard dependencies between modules whenever possible. By hard dependencies, I mean using remote state for a value when the use of the value in the resource doesn't need to exists, for example for AWS policies and role you might be tempted to get the role ARN or resource ARN from a remote state to create a new role or policy, but this would add a hard dependency on the terraform module where one module needs to be applied before the other, while on the AWS resource you don't have any hard dependencies, the ARN resource in a policy doesn't need to exists to create the policy.
+- Avoid unnecessary dependencies between modules whenever possible. By unnecessary dependencies, I mean using remote state for a value when the use of the value in the resource doesn't need to exists, for example for AWS policies and role you might be tempted to get the role ARN or resource ARN from a remote state to create a new role or policy, but this would add an unnecessary dependency on the terraform module where one module needs to be applied before the other, while on the AWS resource you don't have any dependencies, the ARN resource in a policy doesn't need to exists to create the policy.
 - Pay attention to circlar dependencies between modules, when the resource already exists and are imported to terraform, you don't have circular dependencies but by re-creating from scratch it might be the case !
+- Due to previous point, always try to create resources via terraform, instead of creating them manually and importing them afterwards.
 
 ### Reusable/child Module Usage
 
@@ -108,6 +109,8 @@ Use modules to encapsulate and reuse configurations. This promotes DRY (Don't Re
 
 - :warning: ALWAYS change resources using terraform (no manual changes via UI, e.g. AWS web console) :warning:
 - :warning: NEVER EVER apply changes before opening a Pull Request :warning:
+  This ease tracking of changes and because our final goal is to do GitOps which means that git is the source of truth we must have everything
+  on git. We also had the case were people applied changes from a local branch and afterward forget to push and merge the changes !
 - `master` branch SHOULD reflect the current infrastructure state, which means PR that are applied should be merged as soon as they have been reviewed. DON'T keep applied PR open for more that a few days.
 - Keep track of applied changes in the PR using the checkbox
   - [ ] changes applied
