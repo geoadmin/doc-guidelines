@@ -300,8 +300,15 @@ merging `master` into `develop*` (this is only needed when hotfixes have been me
 #### Merging `master` into `develop` or `develop-YYYY-MM-DD`
 
 When hotfixes have been merged into `master` then need to be added as well on the `develop*` branch.
-For this we create a PR to merge `master` into `develop*`. In this case conflict might occur ! To
-solve them procede as follow:
+For this we create a PR to merge `master` into `develop*`.
+
+:warning: Only admin user can merge those PR as due to the branch protection of develop, the PR will
+be block due to the `This branch is out-of-date with the base branch` warning. Due to the nature of
+our git flow `master` branch can be out of date based on `develop` and in this special use case admin
+are allow to bypass the branch protection. See [github.com/orgs/geoadmin/teams/pp-bgdi-admin](https://github.com/orgs/geoadmin/teams/pp-bgdi-admin)
+to see who is currently admin.
+
+In this case conflict might occur ! To solve them procede as follow:
 
 1. First open a PR to merge `master` into `develop` or `develop-YYYY-MM-DD`
 2. Then if the PR can't be merge do to conflict, checkout both branch locally (make sure that both branch are up to date with their origin)
