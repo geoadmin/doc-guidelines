@@ -729,9 +729,11 @@ def init_logging():
 
 Each application should use the following configurations depending on the environment:
 
-- [logging-cfg-local.yml](assets/logging-cfg-local.yml) (local development)
-- [logging-cfg-dev.yml](assets/logging-cfg-dev.yml)
-- [logging-cfg-prod.yml](assets/logging-cfg-prod.yml)
+- [logging-cfg-local.yml](assets/logging-cfg-local.yaml) (local development)
+- [logging-cfg-flask-dev.yml](assets/logging-cfg-flask-dev.yaml)
+- [logging-cfg-flask-prod.yml](assets/logging-cfg-flask-prod.yaml)
+- [logging-cfg-django-dev.yml](assets/logging-cfg-django-dev.yaml)
+- [logging-cfg-django-prod.yml](assets/logging-cfg-django-prod.yaml)
 
 #### Flask logging configuration
 
