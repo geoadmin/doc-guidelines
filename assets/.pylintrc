@@ -62,21 +62,7 @@ confidence=
 # --disable=W".
 disable=missing-docstring,
     missing-module-docstring,
-    unused-argument,
-    unused-variable,
-    pointless-string-statement,
-    too-many-arguments,
-    too-few-public-methods,
-    consider-using-f-string,
     useless-object-inheritance,
-    invalid-name,
-    too-many-branches,
-    too-many-statements,
-    consider-using-with,
-    broad-except,
-    logging-not-lazy,
-    too-many-public-methods,
-
 
 
 # Enable the message, report, category or checker with the given id(s). You can
@@ -195,7 +181,9 @@ signature-mutators=
 expected-line-ending-format=LF
 
 # Regexp for a line that is allowed to be longer than the limit.
-ignore-long-lines=^\s*(# )?<?https?://\S+>?$
+# This regex match URL and allow them to be longer than the line limit. The regex only match lines
+# with only one URL (plus some characters that are required by python syntax, like '#', or quotes and trailing comma)
+ignore-long-lines=^\s*(#\s*)?f?[<"']?https?://\S+[>"']?,?$
 
 # Number of spaces of indent required inside a hanging or continued line.
 indent-after-paren=4
@@ -377,10 +365,10 @@ ignore-comments=yes
 ignore-docstrings=yes
 
 # Ignore imports when computing similarities.
-ignore-imports=no
+ignore-imports=yes
 
 # Minimum lines number of a similarity.
-min-similarity-lines=10
+min-similarity-lines=8
 
 
 [VARIABLES]
@@ -524,6 +512,6 @@ min-public-methods=2
 
 # Exceptions that will emit a warning when being caught. Defaults to
 # "BaseException, Exception".
-overgeneral-exceptions=builtins.Exception.BaseException,
-                       builtins.Exception.Exception,
-                       builtins.Exception.StandardError
+overgeneral-exceptions=builtins.BaseException,
+                       builtins.Exception,
+                       builtins.StandardError
