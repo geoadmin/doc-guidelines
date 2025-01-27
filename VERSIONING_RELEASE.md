@@ -57,8 +57,11 @@ Beta versions are automatically done on every push to `develop`. A beta version 
 
 ### New SemVer Release
 
-New version are done on demand by creating a PR from `develop` into `master`. The PR title should be
-set to one of the following bump types:
+New version are done on demand by creating a PR from `develop` into `master`.
+This can be done either by clicking the "New pull request" button in the "Pull requests"
+menu of the repo or by going directly to the relevant
+`https://github.com/geoadmin/${repo_name}/compare/master...develop` URL.
+The PR title should be set to one of the following bump types:
 
 - `#major` to increment the `MAJOR` version (for breaking changes version)
 - `#minor` to increment the `MINOR` version (default behavior)
