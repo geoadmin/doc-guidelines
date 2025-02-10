@@ -47,10 +47,6 @@ Tools and Scripts
 
 Web applications and pages
 
-### wms-
-
-WMS Services
-
 ### infra-
 
 projects related with infrastructure
