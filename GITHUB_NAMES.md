@@ -19,13 +19,13 @@ small windows applications
 
 Addins or plugins
 
-### cw-
-
-Cartoweb applications
-
 ### doc-
 
 Documentation and Specifications
+
+### handler-
+
+Handler and worker
 
 ### lib-
 
