@@ -12,7 +12,7 @@
 
 ## 1. Base images
 
-Whenever possible, official docker images based on `buster-slim` should be used (e.g. `python:3.7-buster-slim`, `nginx:1.19`, ...). Customized base and application images should be based on `buster-slim`.
+Whenever possible, official docker images based on `bookworm-slim` should be used (e.g. `python:3.13-bookworm-slim`, `nginx:1.19`, ...). Customized base and application images should be based on `bookworm-slim`.
 
 ## 2 Best practices
 
