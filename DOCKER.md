@@ -59,7 +59,7 @@ The build process can considerably be speed up if the layers are ordered in good
 
 ```Dockerfile
 
-FROM debian-buster              > the base layer
+FROM debian-bookworm              > the base layer
 
 RUN apt-get update && \         \
     apt-get install -y \         |
