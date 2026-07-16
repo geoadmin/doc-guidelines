@@ -2,6 +2,9 @@
 
 Geoadmin PP BGDI general and coding guidelines.
 
+> [!WARNING]
+> This repo is not maintained anymore and has migrated to [swissgeo/doc-guidelines](https://github.com/swissgeo/doc-guidelines)
+
 ## Table of Content
 
 1. Coding guidelines (#coding-guidelines)
